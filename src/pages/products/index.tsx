@@ -50,12 +50,31 @@ const Product = () =>
     }
     filteredUsers = useMemo(() =>
     {
-        return filterItems.filter(
+        if (searchValue)
+        {
+           return filterItems.filter(
             (entry: any) =>
                 entry?.productName
                     .toLowerCase()
                     .search(new RegExp(searchValue.toLowerCase())) !== -1
-        )
+        ).sort((a:any, b:any) => {
+        // Sort results by matching name with keyword position in name
+        if(a.productName.toLowerCase().indexOf(searchValue.toLowerCase()) > b.productName.toLowerCase().indexOf(searchValue.toLowerCase())) {
+            return 1;
+        } else if (a.productName.toLowerCase().indexOf(searchValue.toLowerCase()) < b.productName.toLowerCase().indexOf(searchValue.toLowerCase())) {
+            return -1;
+        } else {
+            if(a.productName > b.productName)
+                return 1;
+            else
+                return -1;
+        }
+    }) 
+        } else
+        {
+            return filterItems;
+        }
+        
     }, [searchValue])
     useEffect(() =>
     {
